@@ -11,34 +11,53 @@ export default function CircleProgressComponent({data}: any) {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [isComplete, setIsComplete] = React.useState(false);
   const [isFullProcessComplete, setIsFullProcessComplete] = React.useState(false);
+  const [color, setColor] = React.useState('red');
 
 
   const targetPercentage = 100 / 100;
   const animationState = useValue(0);
 
   const animateChart = () => {
-    animationState.current = 0;
-    runTiming(animationState, targetPercentage, {
-      duration: 800,
-      easing: Easing.inOut(Easing.exp),
-    });
+    if(!isComplete){
+      animationState.current = 0;
+      runTiming(animationState, targetPercentage, {
+        duration: 700,
+        easing: Easing.inOut(Easing.exp),
+      })
+    }
   };
+
+  // useEffect that listens to the value going over 1 and then resets value and applies some state updates 
+  React.useEffect(() => {
+  const unsubscribe = animationState.addListener((value) => {
+    console.log('value', value);
+    if (value > 0.999) {
+      // Alert.alert('Done!!!');
+      animateChart();
+      setColor('green')
+      setIsComplete(true);
+    }
+  })
+  return () => {
+    unsubscribe()
+  }
+}, [animationState, isComplete])
 
   return (
     <TouchableOpacity onPress={()=>setIsPlaying(!isPlaying)}>
 
-      <View style={styles.ringChartContainer}>
-        <DonutChart
-          backgroundColor="purple"
-          radius={radius}
-          strokeWidth={STROKE_WIDTH}
-          percentageComplete={animationState}
-          targetPercentage={targetPercentage}
-        />
-      </View>
-
-      <Pressable onPress={animateChart} style={styles.button}>
-        <Text style={styles.buttonText}></Text>
+      <Pressable onPress={animateChart} >
+        <View style={styles.ringChartContainer}>
+          <DonutChart
+            backgroundColor="purple"
+            radius={radius}
+            strokeWidth={STROKE_WIDTH}
+            percentageComplete={animationState}
+            targetPercentage={targetPercentage}
+            strokeColor={color}
+            image={data.image}
+          />
+        </View>
       </Pressable>
 
       <CountdownCircleTimer

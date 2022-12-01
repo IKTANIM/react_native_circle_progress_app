@@ -14,11 +14,13 @@ import {StyleSheet, View} from 'react-native';
 
 interface CircularProgressProps {
   strokeWidth: number;
+  strokeColor: string;
   radius: number;
   backgroundColor: string;
   percentageComplete: SkiaMutableValue<number>;
   targetPercentage: number;
   children?: React.ReactNode;
+  image: any;
 }
 
 export const DonutChart: FC<CircularProgressProps> = ({
@@ -26,21 +28,26 @@ export const DonutChart: FC<CircularProgressProps> = ({
   radius,
   percentageComplete,
   targetPercentage,
+  strokeColor,
+  image
 }) => {
   const innerRadius = radius - strokeWidth / 2;
   const targetText = `${targetPercentage * 100}`;
 
   const path = Skia.Path.Make();
   path.addCircle(radius, radius, innerRadius);
+  // path.close();
 
-  const image = useImage(require("./resources/images/Goal1.png"));
+  //// Start from top /////
+
+  const imageResources = useImage(image);
 
   return (
     <View style={styles.container}>
       <Canvas style={styles.container}>
         <Path
           path={path}
-          color="orange"
+          color={strokeColor}
           style="stroke"
           strokeJoin="round"
           strokeWidth={strokeWidth}
@@ -48,14 +55,14 @@ export const DonutChart: FC<CircularProgressProps> = ({
           start={0}
           end={percentageComplete}
         />
-        {image && (
+        {imageResources && (
           <Image
-            image={image}
+            image={imageResources}
             fit="contain"
             x={10}
             y={10}
-            width={60}
-            height={60}
+            width={radius * 2 - 20}
+            height={radius * 2 - 20}
           />
         )}
 
