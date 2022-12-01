@@ -24,15 +24,6 @@ export default function CircleProgressComponent({data}: any) {
     });
   };
 
-  const font = useFont(require('./Roboto-Light.ttf'), 60);
-  const smallerFont = useFont(require('./Roboto-Light.ttf'), 25);
-  // const font = null;
-  // const smallerFont = null;
-
-  if (!font || !smallerFont) {
-    return <View />;
-  }
-
   return (
     <TouchableOpacity onPress={()=>setIsPlaying(!isPlaying)}>
 
@@ -43,8 +34,6 @@ export default function CircleProgressComponent({data}: any) {
           strokeWidth={STROKE_WIDTH}
           percentageComplete={animationState}
           targetPercentage={targetPercentage}
-          font={font}
-          smallerFont={smallerFont}
         />
       </View>
 

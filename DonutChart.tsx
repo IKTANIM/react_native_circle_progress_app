@@ -2,9 +2,9 @@ import React, {FC} from 'react';
 
 import {
   Canvas,
+  Fill,
   Image,
   Path,
-  SkFont,
   Skia,
   SkiaMutableValue,
   Text,
@@ -17,8 +17,6 @@ interface CircularProgressProps {
   radius: number;
   backgroundColor: string;
   percentageComplete: SkiaMutableValue<number>;
-  font: SkFont;
-  smallerFont: SkFont;
   targetPercentage: number;
   children?: React.ReactNode;
 }
@@ -27,10 +25,7 @@ export const DonutChart: FC<CircularProgressProps> = ({
   strokeWidth,
   radius,
   percentageComplete,
-  font,
   targetPercentage,
-  smallerFont,
-  children,
 }) => {
   const innerRadius = radius - strokeWidth / 2;
   const targetText = `${targetPercentage * 100}`;
@@ -38,9 +33,7 @@ export const DonutChart: FC<CircularProgressProps> = ({
   const path = Skia.Path.Make();
   path.addCircle(radius, radius, innerRadius);
 
-  const width = font.getTextWidth(targetText);
-  const titleWidth = smallerFont.getTextWidth('Power');
-  const image = useImage(require("./resources/images/Checkmark.png"));
+  const image = useImage(require("./resources/images/Goal1.png"));
 
   return (
     <View style={styles.container}>
@@ -55,22 +48,14 @@ export const DonutChart: FC<CircularProgressProps> = ({
           start={0}
           end={percentageComplete}
         />
-        <Text
-          x={innerRadius - width / 2}
-          y={radius + strokeWidth}
-          text={targetText}
-          font={font}
-          size={32}
-          opacity={percentageComplete}
-        />
         {image && (
           <Image
             image={image}
             fit="contain"
-            x={0}
-            y={0}
-            width={256}
-            height={256}
+            x={10}
+            y={10}
+            width={60}
+            height={60}
           />
         )}
 
