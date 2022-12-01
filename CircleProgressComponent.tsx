@@ -7,25 +7,47 @@ import {DonutChart} from './DonutChart';
 const radius = PixelRatio.roundToNearestPixel(40);
 const STROKE_WIDTH = 4;
 
-export default function CircleProgressComponent({data}: any) {
+export default function CircleProgressComponent({data, animate}: any) {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [isComplete, setIsComplete] = React.useState(false);
   const [isFullProcessComplete, setIsFullProcessComplete] = React.useState(false);
-  const [color, setColor] = React.useState('red');
+  const [borderRadius, setBorderRadius] = React.useState('solid');
 
+  const [type, setType] = React.useState(
+    data?.fromStatus == "inProgress" && data?.toStatus == "completed" ? "inProgressToCompleted"
+    :
+    (data?.fromStatus == "locked" && data?.toStatus == "inProgress" ? "lockedToInProgress" : "lockedToLocked")
+  );
+  const [localDashed, setLocalDashed] = React.useState(type == "inProgressToCompleted" ? false : true);
+  const [color, setColor] = React.useState(type == "inProgressToCompleted" ? "#D3D3D3" : "red");
+  const [localColor, setLocalColor] = React.useState(type == "inProgressToCompleted" ? "purple" : "#D3D3D3");
+  const [dashed, setDashed] = React.useState(true);
+  
 
   const targetPercentage = 100 / 100;
   const animationState = useValue(0);
 
   const animateChart = () => {
     if(!isComplete){
+      // setLocalColor("white");
+      // setLocalDashed(true);
       animationState.current = 0;
       runTiming(animationState, targetPercentage, {
-        duration: 700,
+        duration: 800,
         easing: Easing.inOut(Easing.exp),
       })
     }
   };
+
+  React.useEffect(() => {
+    if(animate){
+      animateChart();
+    }
+    if(type == "inProgressToCompleted"){
+      setBorderRadius('solid');
+    }
+  }, [animate, type]);
+  
 
   // useEffect that listens to the value going over 1 and then resets value and applies some state updates 
   React.useEffect(() => {
@@ -35,7 +57,13 @@ export default function CircleProgressComponent({data}: any) {
       // Alert.alert('Done!!!');
       animateChart();
       setColor('green')
+      setLocalColor('#D3D3D3')
+      setLocalDashed(true)
+      setDashed(false)
       setIsComplete(true);
+      setTimeout(() => {
+        setIsFullProcessComplete(true);
+      }, 900);
     }
   })
   return () => {
@@ -48,68 +76,86 @@ export default function CircleProgressComponent({data}: any) {
 
       <Pressable onPress={animateChart} >
         <View style={styles.ringChartContainer}>
-          <DonutChart
-            backgroundColor="purple"
-            radius={radius}
-            strokeWidth={STROKE_WIDTH}
-            percentageComplete={animationState}
-            targetPercentage={targetPercentage}
-            strokeColor={color}
-            image={data.image}
-          />
-        </View>
-      </Pressable>
+          {/* <View style={[styles.ringChartContainer, {
+            borderStyle: localDashed ? 'dotted' : 'solid',
+            borderWidth: 3,
+            borderRadius: radius,
+            borderColor: localColor,
+            position: 'absolute',
+          }]}/> */}
+          <View style={[styles.ringChartContainer, {
+            position: 'absolute',
+          }]}>
+            <DonutChart
+              radius={radius}
+              strokeWidth={STROKE_WIDTH}
+              percentageComplete={useValue(1)}
+              targetPercentage={1}
+              strokeColor={localColor}
+              image={null}
+              dashed={localDashed ? true : false}
+            />
+          </View>
+          <View style={[styles.ringChartContainer, {
+            position: 'absolute'
+          }]}>
+            <DonutChart
+              radius={radius}
+              strokeWidth={STROKE_WIDTH}
+              percentageComplete={animationState}
+              targetPercentage={targetPercentage}
+              strokeColor={'white'}
+              image={null}
+              dashed={false}
+            />
+          </View>
+          <View style={[styles.ringChartContainer, {
+            position: 'absolute'
+          }]}>
+            <DonutChart
+              radius={radius}
+              strokeWidth={STROKE_WIDTH}
+              percentageComplete={animationState}
+              targetPercentage={targetPercentage}
+              strokeColor={color}
+              image={data.image}
+              showCheck={true}
+              dashed={dashed}
+            />
 
-      <CountdownCircleTimer
-        isPlaying={isPlaying}
-        duration={1}
-        colors={isComplete?['#75CFAA', '#75CFAA']:['#9272D7', '#9272D7']}
-        colorsTime={[1, 0]}
-        // colors={['#9272D7','#9272D7']}
-        // colorsTime={[10,0]}
-        onComplete={() => {
-          if(!isComplete){
-            setIsComplete(true)
-            return ({shouldRepeat: true, delay: 1})
-          }
-          setIsFullProcessComplete(true)
-        }}
-        size={80}
-        strokeLinecap={'butt'}
-        strokeWidth={4}>
-        {({remainingTime, color}) => {
-          return remainingTime == 0 ? (
-            // <Text style={{ color, fontSize: 40 }}>
-            //   {remainingTime}
-            // </Text>
-            <View
-              style={[styles.imageContainer,{borderWidth: 3,borderStyle:isComplete?'solid':'dotted',borderColor:isComplete?'#75CFAA':'#D4D3D5', backgroundColor:isFullProcessComplete?'rgba(154,223,192,0.5)':'#fff'}]}>
-              <View style={{justifyContent:'center', alignItems:'center'}}>
-                <Image
-                  source={data.image}
-                  style={[styles.image, isFullProcessComplete&&{ opacity:0.4}]}
-                  resizeMode="cover"
-                />
-                {isFullProcessComplete&&(
+            {isFullProcessComplete &&
+              <View
+                style={[styles.imageContainer,{ backgroundColor: 'rgba(154,223,192,0.5)', position: 'absolute', 
+                height: 64,
+                width: 64,
+                borderRadius:64,
+                alignItems:'center',
+                justifyContent:'center', marginTop: 8, marginLeft: 8}]}>
+                <View style={{justifyContent:'center', alignItems:'center'}}>
                   <Image
                     source={require('./resources/images/Checkmark.png')}
                     style={[{position:'absolute', height:24,width:24}]}
                     resizeMode="cover"
                   />
-                )}
+                </View>
               </View>
-            </View>
-          ) : (
-            <View style={styles.imageContainer}>
-                <Image
-                  source={data.image}
-                  style={styles.image}
-                  resizeMode="cover"
-                />
-            </View>
-          );
-        }}
-      </CountdownCircleTimer>
+            }
+          
+
+          {/* <View style={[styles.ringChartContainer, {
+            position: 'absolute'
+          }]}>
+            <Image
+              image={checkImage}
+              x={15}
+              y={15}
+              width={radius * 2 - 30}
+              height={radius * 2 - 30}
+            />
+          </View> */}
+          </View>
+        </View>
+      </Pressable>
     </TouchableOpacity>
   );
 }
