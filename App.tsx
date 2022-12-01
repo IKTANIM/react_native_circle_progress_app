@@ -17,6 +17,7 @@ export default function App() {
       data={data}
       renderItem={({item, index})=><View style={{marginHorizontal:4}}><CircleProgressComponent data={item}/></View>}
       horizontal
+      keyExtractor={(item, index)=>index.toString()}
       />
     </SafeAreaView>
   )

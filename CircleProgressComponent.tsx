@@ -1,13 +1,57 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, Button, Image, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, Button, Image, TouchableOpacity, PixelRatio, Pressable, Alert} from 'react-native';
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
+import {Easing, runTiming, useFont, useValue} from '@shopify/react-native-skia';
+import {DonutChart} from './DonutChart';
 
-export default function CircleProgressComponent({data}) {
+const radius = PixelRatio.roundToNearestPixel(40);
+const STROKE_WIDTH = 4;
+
+export default function CircleProgressComponent({data}: any) {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [isComplete, setIsComplete] = React.useState(false);
   const [isFullProcessComplete, setIsFullProcessComplete] = React.useState(false);
+
+
+  const targetPercentage = 100 / 100;
+  const animationState = useValue(0);
+
+  const animateChart = () => {
+    animationState.current = 0;
+    runTiming(animationState, targetPercentage, {
+      duration: 800,
+      easing: Easing.inOut(Easing.exp),
+    });
+  };
+
+  const font = useFont(require('./Roboto-Light.ttf'), 60);
+  const smallerFont = useFont(require('./Roboto-Light.ttf'), 25);
+  // const font = null;
+  // const smallerFont = null;
+
+  if (!font || !smallerFont) {
+    return <View />;
+  }
+
   return (
     <TouchableOpacity onPress={()=>setIsPlaying(!isPlaying)}>
+
+      <View style={styles.ringChartContainer}>
+        <DonutChart
+          backgroundColor="purple"
+          radius={radius}
+          strokeWidth={STROKE_WIDTH}
+          percentageComplete={animationState}
+          targetPercentage={targetPercentage}
+          font={font}
+          smallerFont={smallerFont}
+        />
+      </View>
+
+      <Pressable onPress={animateChart} style={styles.button}>
+        <Text style={styles.buttonText}></Text>
+      </Pressable>
+
       <CountdownCircleTimer
         isPlaying={isPlaying}
         duration={1}
@@ -81,5 +125,20 @@ const styles = StyleSheet.create({
     height:60, 
     borderRadius:80,
     padding:4
-  }
+  },
+  ringChartContainer: {
+    width: radius * 2,
+    height: radius * 2,
+  },
+  button: {
+    marginTop: 40,
+    backgroundColor: 'orange',
+    paddingHorizontal: 60,
+    paddingVertical: 15,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+  },
 });
