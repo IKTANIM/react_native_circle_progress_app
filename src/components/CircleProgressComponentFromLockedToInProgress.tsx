@@ -13,7 +13,7 @@ export default function CircleProgressComponentFromLockedToInProgress({data, ani
   const localColor = "#D3D3D3";
   const animationColor = "#6530e1";
   const dashed = false;
-  const duration = 800;
+  const duration = 1000;
 
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
   const fadeOut = () => {

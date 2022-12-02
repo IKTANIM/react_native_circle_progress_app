@@ -7,7 +7,7 @@ import {DonutChart} from './DonutChart';
 const radius = 40;
 const STROKE_WIDTH = 3;
 
-export default function CircleProgressComponentFromInProgessToComplete({data, animate, onAnimateComplete}: any) {
+export default function CircleProgressComponentFromInProgessToComplete({data, animate, onAnimateComplete, completeToastShow}: any) {
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [isComplete, setIsComplete] = React.useState(false);
   const [isFullProcessComplete, setIsFullProcessComplete] = React.useState(false);
@@ -16,7 +16,7 @@ export default function CircleProgressComponentFromInProgessToComplete({data, an
   const [localColor, setLocalColor] = React.useState("#6530e1");
   const [animationColor, setAnimationColor] = React.useState("#D3D3D3");
   const [dashed, setDashed] = React.useState(true);
-  const duration = 800;
+  const duration = 1000;
 
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const fadeIn = () => {
@@ -61,6 +61,7 @@ export default function CircleProgressComponentFromInProgessToComplete({data, an
       setDashed(false)
       setIsComplete(true);
       fadeIn();
+      completeToastShow?.();
       setTimeout(() => {
         setIsFullProcessComplete(true);
         onAnimateComplete(data);

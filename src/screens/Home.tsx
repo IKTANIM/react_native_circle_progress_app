@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Platform, StyleSheet, StatusBar } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import CircleProgressComponentFromInProgessToComplete from '../components/CircleProgressComponentFromInProgessToComplete'
 import CircleProgressComponentFromLockedToInProgress from '../components/CircleProgressComponentFromLockedToInProgress'
 import CircleProgressComponentLocked from '../components/CircleProgressComponentLocked'
@@ -16,72 +16,75 @@ const getBackupData = () => [
 ]
 
 export default function Home() {
-  const [data, setData] = useState(getBackupData())
-  const [uniqueValue, setUniqueValue] = useState(1)
-  const flatListRef = useRef(null)
-  const [secondAnimation, setSecondAnimation] = useState(false)
+    const [data, setData] = useState(getBackupData())
+    const [uniqueValue, setUniqueValue] = useState(1)
+    const flatListRef = useRef(null)
+    const [secondAnimation, setSecondAnimation] = useState(false)
 
-  const onAnimateComplete = (_data: any) => {
-    if(_data?.fromStatus == "inProgress" && _data?.toStatus == "complete"){
+    const completeToastShow = () => {
         Toast.show({
             text1:'Goal Complete',
             type:'success'
         })
-      setSecondAnimation(true)
     }
-  }
 
-  const restart = () => {
-    setData(getBackupData());
-    setSecondAnimation(false);
-    setUniqueValue(prevUniqueValue => prevUniqueValue+1)
-    // console.log('dsvfsd',  flatListRef.current.index)
-    // flatListRef.current.scrollToIndex({animated: true, index: 4})
-  }
+    const onAnimateComplete = (_data: any) => {
+        if(_data?.fromStatus == "inProgress" && _data?.toStatus == "complete"){
+            // console.log('dsvfsd',  flatListRef.current.index)
+            flatListRef?.current?.scrollToIndex({animated: true, index: 1})
+            setSecondAnimation(true)
+        }
+    }
 
-  return (
-    <SafeAreaView key={uniqueValue} style={{backgroundColor: 'white'}}>
-        <StatusBar barStyle="dark-content" backgroundColor={'white'} />
-        <View style={{flexDirection:'row', marginTop: 80, alignItems: 'center'}}>
-            <View style={{height: size, width: size, marginLeft: 12, marginRight: 4}}>
-                <View style={{marginTop: 8}}>
-                    <View 
-                        style={styles.headerContainer}>
-                        <Text style={styles.headerText}>GETTING STARTED</Text>
-                    </View>
-                    <View style={styles.footerContainer}>
-                        <Text style={styles.headerText}>1/5</Text>
+    const restart = () => {
+        setData(getBackupData());
+        setSecondAnimation(false);
+        setUniqueValue(prevUniqueValue => prevUniqueValue+1)
+    }
+
+    return (
+        <SafeAreaView key={uniqueValue} style={{backgroundColor: 'white'}}>
+            <StatusBar barStyle="dark-content" backgroundColor={'white'} />
+            <View style={{flexDirection:'row', marginTop: 80, alignItems: 'center'}}>
+                <View style={{height: size, width: size, marginLeft: 12, marginRight: 4}}>
+                    <View style={{marginTop: 8}}>
+                        <View 
+                            style={styles.headerContainer}>
+                            <Text style={styles.headerText}>GETTING STARTED</Text>
+                        </View>
+                        <View style={styles.footerContainer}>
+                            <Text style={styles.headerText}>1/5</Text>
+                        </View>
                     </View>
                 </View>
+                <FlatList
+                    ref={flatListRef}
+                    contentContainerStyle={{paddingRight:12}}
+                    data={data}
+                    renderItem={({item, index})=>
+                        <View style={{marginHorizontal:4}}>
+                            {item.fromStatus == "inProgress" &&  item.toStatus == "complete" &&
+                            <CircleProgressComponentFromInProgessToComplete data={item} animate={true} onAnimateComplete={onAnimateComplete} completeToastShow={completeToastShow}/>
+                            }
+                            {item.fromStatus == "locked" &&  item.toStatus == "inProgress" &&
+                            <CircleProgressComponentFromLockedToInProgress data={item} animate={secondAnimation} onAnimateComplete={onAnimateComplete}/>
+                            }
+                            {item.fromStatus == "locked" &&  item.toStatus == "locked" &&
+                            <CircleProgressComponentLocked data={item} animate={false} onAnimateComplete={onAnimateComplete}/>
+                            }
+                        </View>
+                    }
+                    horizontal
+                    keyExtractor={(item, index)=> item.name}
+                    showsHorizontalScrollIndicator={false}
+                />
             </View>
-            <FlatList
-                ref={flatListRef}
-                contentContainerStyle={{paddingRight:12}}
-                data={data}
-                renderItem={({item, index})=>
-                <View style={{marginHorizontal:4}}>
-                    {item.fromStatus == "inProgress" &&  item.toStatus == "complete" &&
-                    <CircleProgressComponentFromInProgessToComplete data={item} animate={true} onAnimateComplete={onAnimateComplete}/>
-                    }
-                    {item.fromStatus == "locked" &&  item.toStatus == "inProgress" &&
-                    <CircleProgressComponentFromLockedToInProgress data={item} animate={secondAnimation} onAnimateComplete={onAnimateComplete}/>
-                    }
-                    {item.fromStatus == "locked" &&  item.toStatus == "locked" &&
-                    <CircleProgressComponentLocked data={item} animate={false} onAnimateComplete={onAnimateComplete}/>
-                    }
-                </View>
-                }
-                horizontal
-                keyExtractor={(item, index)=>index.toString()}
-                showsHorizontalScrollIndicator={false}
-            />
-        </View>
-        <TouchableOpacity onPress={restart} style={{height: 40, width: 80, backgroundColor: 'red', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 8, marginTop: 40}}>
-            <Text>Restart</Text>
-        </TouchableOpacity>
-        <Toast config={ToastConfigCustomComponent} topOffset={Platform.OS == 'android' ? 12 : 50} visibilityTime={2000} />
-    </SafeAreaView>
-  )
+            <TouchableOpacity onPress={restart} style={{height: 40, width: 80, backgroundColor: 'red', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 8, marginTop: 40}}>
+                <Text>Restart</Text>
+            </TouchableOpacity>
+            <Toast config={ToastConfigCustomComponent} topOffset={Platform.OS == 'android' ? 12 : 50} visibilityTime={1500} />
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
