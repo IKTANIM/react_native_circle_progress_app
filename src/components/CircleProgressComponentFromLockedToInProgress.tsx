@@ -59,7 +59,7 @@ export default function CircleProgressComponentFromLockedToInProgress({data, ani
 }, [animationState])
 
   return (
-    <Pressable onPress={animateChart} >
+    <Pressable /*onPress={animateChart}*/ >
       <View style={styles.ringChartContainer}>
         <View style={[styles.ringChartContainer, {
           position: 'absolute',

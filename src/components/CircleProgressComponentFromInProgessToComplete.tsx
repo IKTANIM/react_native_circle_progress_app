@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {Text, View, StyleSheet, Button, Image, TouchableOpacity, PixelRatio, Pressable, Animated} from 'react-native';
-import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
+import {View, StyleSheet, Pressable, Animated} from 'react-native';
 import {Easing, runTiming, useFont, useValue} from '@shopify/react-native-skia';
 import {DonutChart} from './DonutChart';
 
@@ -8,7 +7,6 @@ const radius = 40;
 const STROKE_WIDTH = 3;
 
 export default function CircleProgressComponentFromInProgessToComplete({data, animate, onAnimateComplete, completeToastShow}: any) {
-  const [isPlaying, setIsPlaying] = React.useState(false);
   const [isComplete, setIsComplete] = React.useState(false);
   const [isFullProcessComplete, setIsFullProcessComplete] = React.useState(false);
 
@@ -74,70 +72,67 @@ export default function CircleProgressComponentFromInProgessToComplete({data, an
 }, [animationState, isComplete])
 
   return (
-    <TouchableOpacity onPress={()=>setIsPlaying(!isPlaying)}>
-
-      <Pressable onPress={animateChart} >
-        <View style={styles.ringChartContainer}>
-          <View style={[styles.ringChartContainer, {
-            position: 'absolute',
-          }]}>
-            <DonutChart
-              radius={radius}
-              strokeWidth={STROKE_WIDTH}
-              percentageComplete={useValue(1)}
-              targetPercentage={1}
-              strokeColor={localColor}
-              image={null}
-              dashed={localDashed ? true : false}
-            />
-          </View>
-          <View style={[styles.ringChartContainer, {
-            position: 'absolute'
-          }]}>
-            <DonutChart
-              radius={radius}
-              strokeWidth={STROKE_WIDTH}
-              percentageComplete={animationState}
-              targetPercentage={targetPercentage}
-              strokeColor={'white'}
-              image={null}
-              dashed={false}
-            />
-          </View>
-          <View style={[styles.ringChartContainer, {
-            position: 'absolute'
-          }]}>
-            <DonutChart
-              radius={radius}
-              strokeWidth={STROKE_WIDTH}
-              percentageComplete={animationState}
-              targetPercentage={targetPercentage}
-              strokeColor={animationColor}
-              image={data.image}
-              dashed={dashed}
-            />
-
-            {isComplete &&
-              <Animated.View
-                style={[styles.imageContainer,{opacity: fadeAnim, backgroundColor: 'rgba(30,172,105,0.4)', position: 'absolute',
-                height: 64,
-                width: 64,
-                borderRadius:64,
-                alignItems:'center',
-                justifyContent:'center', marginTop: 8, marginLeft: 8}]}>
-                <View style={{justifyContent:'center', alignItems:'center'}}>
-                  <Animated.Image
-                    source={require('../../resources/images/Checkmark.png')}
-                    style={[{position:'absolute', height:24, width:24, opacity: fadeAnim}]}
-                    resizeMode="cover"
-                  />
-                </View>
-              </Animated.View>
-            }
-          </View>
+    <Pressable /*onPress={animateChart}*/ >
+      <View style={styles.ringChartContainer}>
+        <View style={[styles.ringChartContainer, {
+          position: 'absolute',
+        }]}>
+          <DonutChart
+            radius={radius}
+            strokeWidth={STROKE_WIDTH}
+            percentageComplete={useValue(1)}
+            targetPercentage={1}
+            strokeColor={localColor}
+            image={null}
+            dashed={localDashed ? true : false}
+          />
         </View>
-      </Pressable>
-    </TouchableOpacity>
+        <View style={[styles.ringChartContainer, {
+          position: 'absolute'
+        }]}>
+          <DonutChart
+            radius={radius}
+            strokeWidth={STROKE_WIDTH}
+            percentageComplete={animationState}
+            targetPercentage={targetPercentage}
+            strokeColor={'white'}
+            image={null}
+            dashed={false}
+          />
+        </View>
+        <View style={[styles.ringChartContainer, {
+          position: 'absolute'
+        }]}>
+          <DonutChart
+            radius={radius}
+            strokeWidth={STROKE_WIDTH}
+            percentageComplete={animationState}
+            targetPercentage={targetPercentage}
+            strokeColor={animationColor}
+            image={data.image}
+            dashed={dashed}
+          />
+
+          {isComplete &&
+            <Animated.View
+              style={[styles.imageContainer,{opacity: fadeAnim, backgroundColor: 'rgba(30,172,105,0.4)', position: 'absolute',
+              height: 64,
+              width: 64,
+              borderRadius:64,
+              alignItems:'center',
+              justifyContent:'center', marginTop: 8, marginLeft: 8}]}>
+              <View style={{justifyContent:'center', alignItems:'center'}}>
+                <Animated.Image
+                  source={require('../../resources/images/Checkmark.png')}
+                  style={[{position:'absolute', height:24, width:24, opacity: fadeAnim}]}
+                  resizeMode="cover"
+                />
+              </View>
+            </Animated.View>
+          }
+        </View>
+      </View>
+    </Pressable>
   );
 }
 
