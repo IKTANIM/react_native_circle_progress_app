@@ -43,7 +43,7 @@ export default function Home() {
     }
 
     return (
-        <SafeAreaView key={uniqueValue} style={{backgroundColor: 'white'}}>
+        <SafeAreaView key={uniqueValue} style={{backgroundColor: 'white', flex: 1}}>
             <StatusBar barStyle="dark-content" backgroundColor={'white'} />
             <View style={{flexDirection:'row', marginTop: 80, alignItems: 'center'}}>
                 <View style={{height: size, width: size, marginLeft: 12, marginRight: 4}}>
