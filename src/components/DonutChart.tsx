@@ -3,7 +3,6 @@ import React, {FC} from 'react';
 import {
   Canvas,
   Fill,
-  Image,
   ImageSVG,
   Path,
   processTransform2d,
@@ -14,7 +13,7 @@ import {
   useImage,
   useSVG,
 } from '@shopify/react-native-skia';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 
 interface CircularProgressProps {
   strokeWidth: number;
@@ -57,8 +56,12 @@ export const DonutChart: FC<CircularProgressProps> = ({
   // const svg = useSVG(require("./dash-circle-dotted-svgrepo-com.svg"));
 
   return (
-    <View style={styles.container}>
-      <Canvas style={styles.container}>
+    <View style={[styles.container,
+      // {transform:[{rotate:'270deg'}]}
+    ]}>
+      <Canvas style={[styles.container,
+      {transform:[{rotate:'270deg'}]}
+    ]}>
         <Path
           path={path}
           color={strokeColor}
@@ -78,7 +81,7 @@ export const DonutChart: FC<CircularProgressProps> = ({
           height={100}
         />)
       } */}
-        {imageResources && (
+        {/* {imageResources && (
           <Image
             image={imageResources}
             fit="contain"
@@ -88,8 +91,24 @@ export const DonutChart: FC<CircularProgressProps> = ({
             height={radius * 2 - 16}
             // opacity={1}
           />
-        )}
+        )} */}
       </Canvas>
+      <View
+        style={[
+          {
+            position: "absolute",
+            height: radius * 2 - 16,
+            width: radius * 2 - 16,
+            // borderRadius: 64,
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 8,
+            marginLeft: 8,
+          },
+        ]}
+      >
+        <Image source={image} style={[{height: radius * 2 - 16, width: radius * 2 - 16, borderRadius:radius }]} resizeMode="cover" />
+      </View>
     </View>
   );
 };
