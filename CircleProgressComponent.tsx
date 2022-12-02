@@ -19,9 +19,9 @@ export default function CircleProgressComponent({data, animate}: any) {
     (data?.fromStatus == "locked" && data?.toStatus == "inProgress" ? "lockedToInProgress" : "lockedToLocked")
   );
   const [localDashed, setLocalDashed] = React.useState(type == "inProgressToCompleted" ? false : true);
-  const [color, setColor] = React.useState(type == "inProgressToCompleted" ? "#D3D3D3" : "red");
   const [localColor, setLocalColor] = React.useState(type == "inProgressToCompleted" ? "purple" : "#D3D3D3");
-  const [dashed, setDashed] = React.useState(true);
+  const [color, setColor] = React.useState(type == "inProgressToCompleted" ? "#D3D3D3" : "red");
+  const [dashed, setDashed] = React.useState(type == "inProgressToCompleted" ? true : false);
   
 
   const targetPercentage = 100 / 100;
@@ -43,9 +43,9 @@ export default function CircleProgressComponent({data, animate}: any) {
     if(animate){
       animateChart();
     }
-    if(type == "inProgressToCompleted"){
-      setBorderRadius('solid');
-    }
+    // if(type == "inProgressToCompleted"){
+    //   setBorderRadius('solid');
+    // }
   }, [animate, type]);
   
 
