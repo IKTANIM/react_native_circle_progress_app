@@ -43,7 +43,7 @@ export const DonutChart: FC<CircularProgressProps> = ({
 
   const path = Skia.Path.Make();
   path.addCircle(radius, radius, innerRadius);
-  dashed && path.dash(4, 6, 0);
+  dashed && path.dash(2, 6, 0);
   // path.transform(processTransform2d([{ translateY: 0, translateX: 0, rotate: 45,  }]));
   // path.addCircle(30, 30, 14);
   // path.rArcTo(innerRadius, innerRadius, 0, false, false, 0, -innerRadius * 2);
@@ -55,8 +55,7 @@ export const DonutChart: FC<CircularProgressProps> = ({
   //// Start from top /////
 
   const imageResources = useImage(image);
-  const checkImage = useImage(require('./resources/images/Checkmark.png'));
-  const svg = useSVG(require("./dash-circle-dotted-svgrepo-com.svg"));
+  // const svg = useSVG(require("./dash-circle-dotted-svgrepo-com.svg"));
 
   return (
     <View style={styles.container}>
@@ -84,11 +83,11 @@ export const DonutChart: FC<CircularProgressProps> = ({
           <Image
             image={imageResources}
             fit="contain"
-            x={10}
-            y={10}
-            width={radius * 2 - 20}
-            height={radius * 2 - 20}
-            opacity={0.8}
+            x={8}
+            y={8}
+            width={radius * 2 - 16}
+            height={radius * 2 - 16}
+            // opacity={1}
           />
         )}
         {/* {showCheck && checkImage && (
