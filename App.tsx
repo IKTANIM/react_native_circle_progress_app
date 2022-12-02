@@ -43,7 +43,7 @@ export default function App() {
       }} style={{height: 40, width: 80, backgroundColor: 'red', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 8, marginTop: 40}}>
         <Text>Restart</Text>
       </TouchableOpacity>
-      <Toast config={ToastConfigCustomComponent} topOffset={Platform.OS == 'android' ? 0 : 50} visibilityTime={200000} />
+      <Toast config={ToastConfigCustomComponent} topOffset={Platform.OS == 'android' ? 0 : 50} visibilityTime={2000} />
     </SafeAreaView>
   )
 }
