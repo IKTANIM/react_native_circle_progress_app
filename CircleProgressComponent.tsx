@@ -53,12 +53,12 @@ export default function CircleProgressComponent({data, animate}: any) {
   React.useEffect(() => {
   const unsubscribe = animationState.addListener((value) => {
     console.log('value', value);
-    if (value > 0.999) {
+    if (value > 0.9995) {
       // Alert.alert('Done!!!');
-      animateChart();
-      setColor('green')
       setLocalColor('#D3D3D3')
       setLocalDashed(true)
+      setColor('green')
+      animateChart();
       setDashed(false)
       setIsComplete(true);
       setTimeout(() => {
