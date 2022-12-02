@@ -4,7 +4,7 @@ import {useValue} from '@shopify/react-native-skia';
 import {DonutChart} from './DonutChart';
 
 const radius = 40;
-const STROKE_WIDTH = 4;
+const STROKE_WIDTH = 3;
 
 export default function CircleProgressComponentLocked({data, animate, onAnimateComplete}: any) {
 

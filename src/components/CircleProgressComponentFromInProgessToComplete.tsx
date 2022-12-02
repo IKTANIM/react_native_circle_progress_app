@@ -5,7 +5,7 @@ import {Easing, runTiming, useFont, useValue} from '@shopify/react-native-skia';
 import {DonutChart} from './DonutChart';
 
 const radius = 40;
-const STROKE_WIDTH = 4;
+const STROKE_WIDTH = 3;
 
 export default function CircleProgressComponentFromInProgessToComplete({data, animate, onAnimateComplete}: any) {
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -113,7 +113,6 @@ export default function CircleProgressComponentFromInProgessToComplete({data, an
               targetPercentage={targetPercentage}
               strokeColor={animationColor}
               image={data.image}
-              showCheck={true}
               dashed={dashed}
             />
 

@@ -1,8 +1,11 @@
-import { View, Text, SafeAreaView, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Platform, StyleSheet, StatusBar } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import CircleProgressComponentFromInProgessToComplete from '../components/CircleProgressComponentFromInProgessToComplete'
 import CircleProgressComponentFromLockedToInProgress from '../components/CircleProgressComponentFromLockedToInProgress'
 import CircleProgressComponentLocked from '../components/CircleProgressComponentLocked'
+import Toast from 'react-native-toast-message'
+import ToastConfigCustomComponent from '../components/ToastConfigCustomComponent'
+ const size = 78;
 
 const getBackupData = () => [
   {name:'goal1', image:require('../../resources/images/Goal1.png'), fromStatus: "inProgress", toStatus: "complete"},
@@ -20,6 +23,10 @@ export default function Home() {
 
   const onAnimateComplete = (_data: any) => {
     if(_data?.fromStatus == "inProgress" && _data?.toStatus == "complete"){
+        Toast.show({
+            text1:'Goal Complete',
+            type:'success'
+        })
       setSecondAnimation(true)
     }
   }
@@ -34,30 +41,75 @@ export default function Home() {
 
   return (
     <SafeAreaView key={uniqueValue} style={{backgroundColor: 'white'}}>
-      <FlatList
-        ref={flatListRef}
-        style={{marginTop:20}}
-        data={data}
-        renderItem={({item, index})=>
-          <View style={{marginHorizontal:4}}>
-            {item.fromStatus == "inProgress" &&  item.toStatus == "complete" &&
-              <CircleProgressComponentFromInProgessToComplete data={item} animate={true} onAnimateComplete={onAnimateComplete}/>
-            }
-            {item.fromStatus == "locked" &&  item.toStatus == "inProgress" &&
-              <CircleProgressComponentFromLockedToInProgress data={item} animate={secondAnimation} onAnimateComplete={onAnimateComplete}/>
-            }
-            {item.fromStatus == "locked" &&  item.toStatus == "locked" &&
-              <CircleProgressComponentLocked data={item} animate={false} onAnimateComplete={onAnimateComplete}/>
-            }
-          </View>
-        }
-        horizontal
-        keyExtractor={(item, index)=>index.toString()}
-        showsHorizontalScrollIndicator={false}
-      />
-      <TouchableOpacity onPress={restart} style={{height: 40, width: 80, backgroundColor: 'red', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 8, marginTop: 40}}>
-        <Text>Restart</Text>
-      </TouchableOpacity>
+        <StatusBar barStyle="dark-content" backgroundColor={'white'} />
+        <View style={{flexDirection:'row', marginTop: 80, alignItems: 'center'}}>
+            <View style={{height: size, width: size, marginLeft: 12, marginRight: 4}}>
+                <View style={{marginTop: 8}}>
+                    <View 
+                        style={styles.headerContainer}>
+                        <Text style={styles.headerText}>GETTING STARTED</Text>
+                    </View>
+                    <View style={styles.footerContainer}>
+                        <Text style={styles.headerText}>1/5</Text>
+                    </View>
+                </View>
+            </View>
+            <FlatList
+                ref={flatListRef}
+                contentContainerStyle={{paddingRight:12}}
+                data={data}
+                renderItem={({item, index})=>
+                <View style={{marginHorizontal:4}}>
+                    {item.fromStatus == "inProgress" &&  item.toStatus == "complete" &&
+                    <CircleProgressComponentFromInProgessToComplete data={item} animate={true} onAnimateComplete={onAnimateComplete}/>
+                    }
+                    {item.fromStatus == "locked" &&  item.toStatus == "inProgress" &&
+                    <CircleProgressComponentFromLockedToInProgress data={item} animate={secondAnimation} onAnimateComplete={onAnimateComplete}/>
+                    }
+                    {item.fromStatus == "locked" &&  item.toStatus == "locked" &&
+                    <CircleProgressComponentLocked data={item} animate={false} onAnimateComplete={onAnimateComplete}/>
+                    }
+                </View>
+                }
+                horizontal
+                keyExtractor={(item, index)=>index.toString()}
+                showsHorizontalScrollIndicator={false}
+            />
+        </View>
+        <TouchableOpacity onPress={restart} style={{height: 40, width: 80, backgroundColor: 'red', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 8, marginTop: 40}}>
+            <Text>Restart</Text>
+        </TouchableOpacity>
+        <Toast config={ToastConfigCustomComponent} topOffset={Platform.OS == 'android' ? 12 : 50} visibilityTime={2000} />
     </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+    headerContainer: {
+      width: size-8,
+      height: size-8,
+      backgroundColor: '#FFF4E2',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 20,
+    },
+    headerText: {
+      fontSize: 12,
+      color: '#E6B270',
+      fontWeight: '800',
+    },
+    footerContainer: {
+      position: 'absolute',
+      bottom: 0,
+      right: -6,
+      backgroundColor: '#FFF4E2',
+      height: 24,
+      width: 32,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth:1,
+      borderColor:'#fff',
+      borderRadius:10, 
+      marginTop:-12,
+    },
+  });

@@ -11,7 +11,7 @@ const ToastConfigCustomComponent = {
     <View>
       <View style={[styles.container]}>
         <View style={{flexDirection: 'row', alignItems:'center'}}>
-          <View style={{height:24, width:24, borderRadius:24, backgroundColor:'#32B065', justifyContent:'center',alignItems:'center'}}>
+          <View style={{height:24, width:24, borderRadius:24, backgroundColor:'#1eac69', justifyContent:'center',alignItems:'center'}}>
             <Image source={require('../../resources/images/SmallCheckmark.png')} style={{height:8, width:8}}/>
           </View>
           <View style={styles.textContainer}>

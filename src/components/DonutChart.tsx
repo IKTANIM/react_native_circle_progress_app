@@ -25,7 +25,6 @@ interface CircularProgressProps {
   children?: React.ReactNode;
   image: any;
   dashed?: boolean;
-  showCheck?: boolean;
 }
 
 export const DonutChart: FC<CircularProgressProps> = ({
@@ -36,7 +35,6 @@ export const DonutChart: FC<CircularProgressProps> = ({
   strokeColor,
   image,
   dashed,
-  showCheck,
 }) => {
   const innerRadius = radius - strokeWidth / 2;
   const targetText = `${targetPercentage * 100}`;
@@ -44,6 +42,7 @@ export const DonutChart: FC<CircularProgressProps> = ({
   const path = Skia.Path.Make();
   path.addCircle(radius, radius, innerRadius);
   dashed && path.dash(2, 6, 0);
+  // path.dash(2, 0, 200);
   // path.transform(processTransform2d([{ translateY: 0, translateX: 0, rotate: 45,  }]));
   // path.addCircle(30, 30, 14);
   // path.rArcTo(innerRadius, innerRadius, 0, false, false, 0, -innerRadius * 2);
@@ -90,16 +89,6 @@ export const DonutChart: FC<CircularProgressProps> = ({
             // opacity={1}
           />
         )}
-        {/* {showCheck && checkImage && (
-          <Image
-            image={checkImage}
-            x={15}
-            y={15}
-            width={radius * 2 - 30}
-            height={radius * 2 - 30}
-          />
-        )} */}
-
       </Canvas>
     </View>
   );
