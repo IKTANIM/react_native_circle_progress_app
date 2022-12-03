@@ -6,7 +6,7 @@ import {DonutChart} from './DonutChart';
 const radius = 40;
 const STROKE_WIDTH = 3;
 
-export default function CircleProgressComponentLocked({data, animate, onAnimateComplete}: any) {
+export default function CircleProgressComponentLocked({data}) {
 
   const localDashed = true;
   const localColor = "#D3D3D3";

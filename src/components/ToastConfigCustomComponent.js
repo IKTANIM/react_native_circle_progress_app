@@ -1,13 +1,8 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import Toast from 'react-native-toast-message';
-declare type ToastProps = {
-  text1: string;
-  text2: string;
-  props: any;
-};
+
 const ToastConfigCustomComponent = {
-  success: ({text1, text2, props}: ToastProps) => (
+  success: ({text1, text2, props}) => (
     <View>
       <View style={[styles.container]}>
         <View style={{flexDirection: 'row', alignItems:'center'}}>

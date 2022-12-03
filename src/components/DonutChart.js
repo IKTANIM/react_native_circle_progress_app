@@ -4,27 +4,13 @@ import {
   Canvas,
   Path,
   Skia,
-  SkiaMutableValue,
-  useImage,
 } from '@shopify/react-native-skia';
 import { StyleSheet, View, Image } from 'react-native';
 
-interface CircularProgressProps {
-  strokeWidth: number;
-  strokeColor: string;
-  radius: number;
-  percentageComplete: SkiaMutableValue<number>;
-  targetPercentage: number;
-  children?: React.ReactNode;
-  image: any;
-  dashed?: boolean;
-}
-
-export const DonutChart: FC<CircularProgressProps> = ({
+export const DonutChart = ({
   strokeWidth,
   radius,
   percentageComplete,
-  targetPercentage,
   strokeColor,
   image,
   dashed,

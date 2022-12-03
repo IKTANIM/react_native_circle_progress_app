@@ -28,7 +28,7 @@ export default function Home() {
         })
     }
 
-    const onAnimateComplete = (_data: any) => {
+    const onAnimateComplete = (_data) => {
         if(_data?.fromStatus == "inProgress" && _data?.toStatus == "complete"){
             // console.log('dsvfsd',  flatListRef.current.index)
             flatListRef?.current?.scrollToIndex({animated: true, index: 1})
